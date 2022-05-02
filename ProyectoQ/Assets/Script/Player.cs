@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     [SerializeField] SpriteRenderer sprRenderer;
     [SerializeField] Animator anmtr;
 
+    [SerializeField] public AudioSource pasos;
+
 
     // Start is called before the first frame update
     void Start()
@@ -40,16 +42,19 @@ public class Player : MonoBehaviour
             {
                 sprRenderer.flipX = true;
                 anmtr.SetBool("isRunning", true);
+                pasos.Play();
             }
             else
             {
                 sprRenderer.flipX = false;
                 anmtr.SetBool("isRunning", true);
+                pasos.Play();
             }    
         }
         else
         {
             anmtr.SetBool("isRunning", false);
+            pasos.Stop();
         }
     }
     void Movement()

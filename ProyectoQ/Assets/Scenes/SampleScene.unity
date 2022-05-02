@@ -2078,6 +2078,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5788700223440862110, guid: 922d38eb86b268846a479c47f06e4e2a, type: 3}
+      propertyPath: pasos
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5788700223440862111, guid: 922d38eb86b268846a479c47f06e4e2a, type: 3}
       propertyPath: m_RootOrder
       value: 0
