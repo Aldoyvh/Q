@@ -16,6 +16,13 @@ public class Player : MonoBehaviour
     [SerializeField] public AudioSource pasos;
 
 
+    [SerializeField] Transform feet;
+    [SerializeField] float jumpForce;
+    [SerializeField] float raycastLenght;
+    [SerializeField] LayerMask groundLayer;
+    bool willJump;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +33,7 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         Movement();
-
+        Jump();
     }
     void Update()
     {
@@ -42,23 +49,41 @@ public class Player : MonoBehaviour
             {
                 sprRenderer.flipX = true;
                 anmtr.SetBool("isRunning", true);
-                pasos.Play();
             }
             else
             {
                 sprRenderer.flipX = false;
                 anmtr.SetBool("isRunning", true);
-                pasos.Play();
             }    
         }
         else
         {
             anmtr.SetBool("isRunning", false);
-            pasos.Stop();
+        }
+        RaycastHit2D hit = Physics2D.Raycast(feet.position, Vector2.down, raycastLenght, groundLayer);
+        if (hit.collider)
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                willJump = true;
+            }
+        }
+        else
+        {
+            willJump = false;
         }
     }
     void Movement()
     {
         rbody2D.velocity = currentspeed * Vector2.right * movementSpeed + rbody2D.velocity.y * Vector2.up;
+    }
+    void Jump()
+    {
+        if (willJump)
+        {
+            rbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            willJump = false;
+        }
+
     }
 }
