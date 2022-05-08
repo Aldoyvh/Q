@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
 
     [SerializeField] private Rigidbody2D rbody2D;
-    [SerializeField] private float currentspeed;
+    private float currentspeed;
     [SerializeField] private float movementSpeed;
 
 
@@ -21,6 +21,9 @@ public class Player : MonoBehaviour
     [SerializeField] float raycastLenght;
     [SerializeField] LayerMask groundLayer;
     bool willJump;
+
+    [SerializeField] GameObject swordCollider;
+    bool isAttacking;
 
 
     // Start is called before the first frame update
@@ -37,7 +40,11 @@ public class Player : MonoBehaviour
     }
     void Update()
     {
-        Inputs();
+        if (!isAttacking)
+        {
+            Inputs();
+        }
+            
     }
     void Inputs()
     {
@@ -72,6 +79,10 @@ public class Player : MonoBehaviour
         {
             willJump = false;
         }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Attack();
+        }
     }
     void Movement()
     {
@@ -85,5 +96,25 @@ public class Player : MonoBehaviour
             willJump = false;
         }
 
+    }
+
+    void Attack()
+    {
+        anmtr.SetTrigger("isAttacking");
+        isAttacking = true;
+        anmtr.SetBool("isRunning", false);
+        if (sprRenderer.flipX)
+            swordCollider.transform.localScale = new Vector3(-1, 1, 1);
+        else
+            swordCollider.transform.localScale = Vector3.one;
+    }
+    public void EnableSwordCollider()
+    {
+        swordCollider.SetActive(true);
+    }
+    public void DisableSwordCollider()
+    {
+        swordCollider.SetActive(false);
+        isAttacking = false;
     }
 }
