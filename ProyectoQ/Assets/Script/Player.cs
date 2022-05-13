@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class Player : MonoBehaviour
     bool willJump;
 
     [SerializeField] GameObject swordCollider;
-    bool isAttacking;
+    public bool isAttacking;
 
 
     // Start is called before the first frame update
@@ -40,32 +41,28 @@ public class Player : MonoBehaviour
     }
     void Update()
     {
-        if (!isAttacking)
-        {
-            Inputs();
-        }
+
+        Inputs();
+        
+
             
     }
     void Inputs()
     {
         currentspeed = Input.GetAxis("Horizontal");
-        
+        anmtr.SetFloat("walkspeed", currentspeed);
         if (currentspeed != 0)
         {
             if (currentspeed < 0)
             {
                 sprRenderer.flipX = true;
-                anmtr.SetBool("isRunning", true);
+                
             }
             else
             {
                 sprRenderer.flipX = false;
-                anmtr.SetBool("isRunning", true);
+                
             }    
-        }
-        else
-        {
-            anmtr.SetBool("isRunning", false);
         }
         RaycastHit2D hit = Physics2D.Raycast(feet.position, Vector2.down, raycastLenght, groundLayer);
         if (hit.collider)
@@ -78,10 +75,6 @@ public class Player : MonoBehaviour
         else
         {
             willJump = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Attack();
         }
     }
     void Movement()
@@ -98,23 +91,24 @@ public class Player : MonoBehaviour
 
     }
 
-    void Attack()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        anmtr.SetTrigger("isAttacking");
-        isAttacking = true;
-        anmtr.SetBool("isRunning", false);
-        if (sprRenderer.flipX)
-            swordCollider.transform.localScale = new Vector3(-1, 1, 1);
-        else
-            swordCollider.transform.localScale = Vector3.one;
-    }
-    public void EnableSwordCollider()
-    {
-        swordCollider.SetActive(true);
-    }
-    public void DisableSwordCollider()
-    {
-        swordCollider.SetActive(false);
-        isAttacking = false;
+        if (collision.CompareTag("Piedra"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
+            Score.points = 0;
+        }
+        else if (collision.CompareTag("Hazard"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
+            Score.points = 0;
+        }
+        else if (collision.CompareTag("Stone"))
+        {
+            Score.points++;
+            Destroy(collision.gameObject);
+        }
     }
 }
+
+
