@@ -124,6 +124,11 @@ public class Player : MonoBehaviour
             bomb.Play();
             Score.points = 0;
         }
+        else if (collision.CompareTag("Finish"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            Score.points = 0;
+        }
     }
 }
 
