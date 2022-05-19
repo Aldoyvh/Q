@@ -9,6 +9,7 @@ TagManager:
   - Piedra
   - Hazard
   - Stone
+  - Bomb
   layers:
   - Default
   - TransparentFX

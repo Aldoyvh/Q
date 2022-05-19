@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
@@ -13,6 +14,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] SpriteRenderer sprRenderer;
     [SerializeField] Animator anmtr;
+    public static int hp = 2;
+    public Slider Life;
 
     [SerializeField] public AudioSource pasos;
 
@@ -23,8 +26,8 @@ public class Player : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
     bool willJump;
 
-    [SerializeField] GameObject swordCollider;
-    public bool isAttacking;
+    [SerializeField] AudioSource point;
+    [SerializeField] AudioSource bomb;
 
 
     // Start is called before the first frame update
@@ -41,10 +44,13 @@ public class Player : MonoBehaviour
     }
     void Update()
     {
-
+        Life.value = hp;
         Inputs();
-        
 
+        if (hp == 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
+        }
             
     }
     void Inputs()
@@ -95,18 +101,28 @@ public class Player : MonoBehaviour
     {
         if (collision.CompareTag("Piedra"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
+            hp = hp - 1;
+            bomb.Play();
             Score.points = 0;
         }
         else if (collision.CompareTag("Hazard"))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
+            bomb.Play();
             Score.points = 0;
         }
         else if (collision.CompareTag("Stone"))
         {
             Score.points++;
+            point.Play();
             Destroy(collision.gameObject);
+        }
+        else if (collision.CompareTag("Bomb"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
+            bomb.Play();
+            Score.points = 0;
         }
     }
 }

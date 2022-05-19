@@ -5,7 +5,7 @@ using UnityEngine;
 public class Throw : MonoBehaviour
 {
     [Header("TeacherThrower")]
-    public GameObject Projectile;
+    public GameObject[] Projectile;
     public float nextShot;
     public Transform parent;
     public float fireRate;
@@ -34,7 +34,8 @@ public class Throw : MonoBehaviour
 
     void InstatiateFireball()
     {
-        GameObject go = Instantiate(Projectile, parent);
+        int n = Random.Range(0, Projectile.Length);
+        GameObject go = Instantiate(Projectile[n], parent);
         go.transform.rotation = Quaternion.identity;
         go.transform.localPosition = Vector3.zero;
         go.GetComponent<Object>().speedMovement *= -1;
